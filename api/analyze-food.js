@@ -24,7 +24,7 @@ User meal details: ${notes || '(none provided)'}` }
       body: JSON.stringify({
         model: 'gpt-5.6-luna',
         input: [{ role: 'user', content }],
-        temperature: 0.2,
+        
         max_output_tokens: 300
       })
     });
