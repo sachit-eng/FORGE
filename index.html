@@ -152,7 +152,19 @@ const defaultSplit={Mon:'Chest + Back',Tue:'Legs + Shoulders',Wed:'Arms + Core',
 let s=JSON.parse(localStorage.getItem(KEY)||'null')||{account:null,accounts:[],loggedIn:false,steps:0,stepTarget:10000,stepRecords:{},n:{cal:0,pro:0,carb:0,fat:0,fiber:0},goals:{cal:2400,pro:150,carb:280,fat:70},mission:['10,000 steps','150g protein','Complete workout','Drink 2.5L water','Daily movement'],split:{...defaultSplit},reminders:true,lifts:[]};
 s.accounts=Array.isArray(s.accounts)?s.accounts:[];if(s.account&&!s.accounts.some(a=>a.email&&a.email.toLowerCase()===s.account.email.toLowerCase()))s.accounts.push({...s.account,password:s.account.password||''});
 s.n=s.n||{cal:0,pro:0,carb:0,fat:0,fiber:0};s.n.fiber=s.n.fiber||0;s.savedEmails=s.savedEmails||[];s.stepRecords=s.stepRecords||{};s.mission=s.mission||['10,000 steps','150g protein','Complete workout','Drink 2.5L water','Daily movement'];s.missionDone=s.missionDone||{};const $=id=>document.getElementById(id),save=()=>localStorage.setItem(KEY,JSON.stringify(s));
-function dateKey(d=new Date()){return d.toISOString().slice(0,10)}
+  if(!s.nutritionMigrationV1){
+  s.n={cal:0,pro:0,carb:0,fat:0,fiber:0};
+  s.goals={cal:3000,pro:150,carb:280,fat:70};
+  s.nutritionMigrationV1=true;
+  save();
+}
+  
+function dateKey(d=new Date()){return d.toISOString().slice(0,10)}if(!s.nutritionMigrationV1){
+  s.n={cal:0,pro:0,carb:0,fat:0,fiber:0};
+  s.goals={cal:3000,pro:150,carb:280,fat:70};
+  s.nutritionMigrationV1=true;
+  save();
+}
 function stepKey(){return ((s.account?.email||'guest').trim().toLowerCase()+'|'+dateKey())}
 function ensureTodaySteps(){if(!s.account)return;s.stepRecords=s.stepRecords||{};const k=stepKey();if(!Object.prototype.hasOwnProperty.call(s.stepRecords,k))s.stepRecords[k]=0;s.steps=Math.max(0,Number(s.stepRecords[k])||0)}
 // v5 used a fake 7,420-step demo value. Never carry that value into a real day.
